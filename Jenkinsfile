@@ -51,7 +51,7 @@ node {
   // report back
   
    def configs = [
-        new ViolationConfig(Reporter.FINDBUGS, ".*/findbugsXml.xml\$")
+        new ViolationConfig(Reporter.FINDBUGS, ".*/findbugs.*\\.xml\$")
         ];
     
     step([$class: 'ViolationsToGitHubRecorder', 
