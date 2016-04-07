@@ -54,7 +54,10 @@ node {
         new ViolationConfig(Reporter.FINDBUGS, ".*/findbugsXml.xml\$")
         ];
     
-    step([$class: 'ViolationsToGitHubRecorder', repositoryName: 'experiment',
+    step([$class: 'ViolationsToGitHubRecorder', 
+		repositoryOwner: 'AllocateSoftware',
+    	repositoryName: 'experiment',
+    	pullRequestId: '${pr}'
     violationConfigs: configs]);
 
 
