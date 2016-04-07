@@ -46,12 +46,12 @@ node {
 
 /* Execute maven */
   sh "${mvnHome}/bin/mvn -c clean install";
-
+  sh "${mvnHome}/bin/mvn findbugs:check";
 
   // report back
   
    def configs = [
-        new ViolationConfig(Reporter.FINDBUGS, "ASDF")
+        new ViolationConfig(Reporter.FINDBUGS, ".*/findbugsXml.xml$")
         ];
     
     step([$class: 'ViolationsToGitHubRecorder', repositoryName: 'experiment',
