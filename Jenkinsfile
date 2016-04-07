@@ -22,12 +22,13 @@ node('docker') {
   def branch = readFile('status').trim()
   */
 
-  theJob = jobName.replace("/", " ");;
+  theJob = jobName.replace("/", " ");
 
 
   //echo "Build of ${env.GIT_COMMIT} on ${env.GIT_BRANCH}";
   echo "Build of ${env.JOB_NAME} #${env.BUILD_NUMBER} : ${commit} on ${branch}";
 
+  echo "Is this a PR?";
 
   }
 
