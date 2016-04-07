@@ -33,7 +33,7 @@ node {
   echo "Is this a PR?";
   int pr = 0;
   if( branch.startsWith("PR/") ) {
-  	pr = Integer.parseInt(branch.substring(2));
+  	pr = Integer.parseInt(branch.substring(3));
 
   	echo "This is PR ${pr}";
 
