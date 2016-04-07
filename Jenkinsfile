@@ -1,5 +1,7 @@
+import org.jenkinsci.plugins.jvctg.config.ViolationConfig;
+import se.bjurr.violations.lib.reports.Reporter;
 
-node('docker') {
+node {
   ws("experiment") {
 
   	 stage name:"Checkout";    
@@ -29,6 +31,33 @@ node('docker') {
   echo "Build of ${env.JOB_NAME} #${env.BUILD_NUMBER} : ${commit} on ${branch}";
 
   echo "Is this a PR?";
+  int pr = 0;
+  if( branch.startsWith("PR/") ) {
+  	pr = Integer.parseInt(s.substring(2));
+
+  	echo "This is PR ${pr}";
+
+  }
+
+  // build
+	def mvnHome = tool 'maven'
+  //sh "${mvnHome}/bin/mvn -B verify"
+  env.MAVEN_OPTS="-Xmx2G";
+
+/* Execute maven */
+  sh "${mvnHome}/bin/mvn -c clean install";
+
+
+  // report back
+  
+   def configs = [
+        new ViolationConfig(Reporter.FINDBUGS, "ASDF")
+        ];
+    
+    step([$class: 'ViolationsToGitHubRecorder', repositoryName: 'experiment',
+    violationConfigs: configs]);
+
+
 
   }
 
