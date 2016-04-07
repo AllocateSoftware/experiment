@@ -57,7 +57,7 @@ node {
     step([$class: 'ViolationsToGitHubRecorder', 
 		repositoryOwner: 'AllocateSoftware',
     	repositoryName: 'experiment',
-    	pullRequestId: '${pr}',
+    	pullRequestId: "${pr}",
     violationConfigs: configs]);
 
 
