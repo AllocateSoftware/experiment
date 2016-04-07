@@ -40,7 +40,7 @@ node {
   }
 
   // build
-	def mvnHome = tool 'maven'
+	def mvnHome = tool 'maven';
   //sh "${mvnHome}/bin/mvn -B verify"
   env.MAVEN_OPTS="-Xmx2G";
 
@@ -51,7 +51,7 @@ node {
   // report back
   
    def configs = [
-        new ViolationConfig(Reporter.FINDBUGS, ".*/findbugsXml.xml$")
+        new ViolationConfig(Reporter.FINDBUGS, ".*/findbugsXml.xml\$")
         ];
     
     step([$class: 'ViolationsToGitHubRecorder', repositoryName: 'experiment',
