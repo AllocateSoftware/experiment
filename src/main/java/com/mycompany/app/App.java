@@ -11,9 +11,21 @@ public class App
         System.out.println( "Hello World!" );
 
         // Generate some findbugs perhaps
-        int j;
+        String a = "hello";
+		String b = "goodbye";
 
-        System.out.println("A" + "B" + "C");
+		if( a == b )
+		{
+			System.out.println( "Hello World!" );
+		}
+
+		String aString = "bob";
+		  b.replace('b', 'p');
+		  if(b.equals("pop"))
+		  	{
+			System.out.println( "Hello World!" );
+		}
+
 
     }
 }
