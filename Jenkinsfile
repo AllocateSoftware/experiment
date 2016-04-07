@@ -57,6 +57,7 @@ node {
     step([$class: 'ViolationsToGitHubRecorder', 
 		repositoryOwner: 'AllocateSoftware',
     	repositoryName: 'experiment',
+    	createSingleFileComments: true,
     	pullRequestId: "${pr}",
     violationConfigs: configs]);
 
