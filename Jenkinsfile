@@ -4,32 +4,26 @@ import se.bjurr.violations.lib.reports.Reporter;
 
 class BuildEnv implements java.io.Serializable {
 	String jobName;
+	def commit;
+	def branch;
+	def theJob;
+
+	public BuildEnv(commit) {
+		// figure out the branch name
+	  jobName = "${env.JOB_NAME}"
+	  def idx = jobName.lastIndexOf('/');
+	  branch = jobName.substring(idx+1);
+	  // Un-remove the / to - conversion.
+	  branch = branch.replace("-","/");
+	  branch = branch.replace("%2F","/");
 
 
-	public void checkout() {
-		stage name:"Checkout";    
-  		checkout scm;
+	  /* Doesn't work - not checked out on a branch
+	  sh "git branch | sed -n '/\\* /s///p' > status"
+	  def branch = readFile('status').trim()
+	  */
 
-  		sh 'git rev-parse HEAD > status'
-		  commit = readFile('status').trim()
-
-		  // figure out the branch name
-		  jobName = "${env.JOB_NAME}"
-		  def idx = jobName.lastIndexOf('/');
-		  branch = jobName.substring(idx+1);
-		  // Un-remove the / to - conversion.
-		  branch = branch.replace("-","/");
-		  branch = branch.replace("%2F","/");
-
-
-		  /* Doesn't work - not checked out on a branch
-		  sh "git branch | sed -n '/\\* /s///p' > status"
-		  def branch = readFile('status').trim()
-		  */
-
-		  theJob = jobName.replace("/", " ");
-
-
+	  theJob = jobName.replace("/", " ");
 	}
 
 	public String toString() {
@@ -37,16 +31,21 @@ class BuildEnv implements java.io.Serializable {
 	}
 }
 
-BuildEnv env;
+BuildEnv buildEnv;
 
 node {
   ws("experiment") {
 
-  	buildEnv = new BuildEnv();
+	stage name:"Checkout";    
+		checkout scm;
 
-  	buildEnv.checkout();
+		sh 'git rev-parse HEAD > status'
+	  commit = readFile('status').trim()
 
-  	System.out.println("Env: ${buildEnv}")
+	  buildEnv = new BuildEnv(commit);
+
+
+       echo "Env: ${buildEnv}";
   	
 
   
