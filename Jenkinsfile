@@ -2,7 +2,7 @@ import org.jenkinsci.plugins.jvctg.config.ViolationConfig;
 import se.bjurr.violations.lib.reports.Reporter;
 
 
-class BuildEnv {
+class BuildEnv implements java.io.Serializable {
 	String jobName;
 
 
