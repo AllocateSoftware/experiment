@@ -8,7 +8,7 @@ class BuildEnv implements java.io.Serializable {
 	def branch;
 	def theJob;
 
-	public BuildEnv(commit) {
+	public BuildEnv(env, commit) {
 		// figure out the branch name
 	  jobName = "${env.JOB_NAME}"
 	  def idx = jobName.lastIndexOf('/');
@@ -42,7 +42,7 @@ node {
 		sh 'git rev-parse HEAD > status'
 	  commit = readFile('status').trim()
 
-	  buildEnv = new BuildEnv(commit);
+	  buildEnv = new BuildEnv(env, commit);
 
 
        echo "Env: ${buildEnv}";
