@@ -13,13 +13,14 @@ public class App
         // Generate some findbugs perhaps
         String a = "hello";
 		String b = "goodbye";
+		String c = "asdf";
 
-		if( a = b )
+		if( a == c)
 		{
 			System.out.println( "Hello World!" );
 		}
 
-		
+
 
 		String aString = "bob";
 		  b.replace('b', 'p');
