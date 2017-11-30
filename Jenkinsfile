@@ -1,66 +1,31 @@
+import groovy.transform.Field
 
-
-class BuildEnv implements java.io.Serializable {
-	String jobName;
-	def commit;
-	def branch;
-	def theJob;
-
-	public BuildEnv(env, commit) {
-		// figure out the branch name
-	  jobName = "${env.JOB_NAME}"
-	  def idx = jobName.lastIndexOf('/');
-	  branch = jobName.substring(idx+1);
-	  // Un-remove the / to - conversion.
-	  branch = branch.replace("-","/");
-	  branch = branch.replace("%2F","/");
-
-
-	  /* Doesn't work - not checked out on a branch
-	  sh "git branch | sed -n '/\\* /s///p' > status"
-	  def branch = readFile('status').trim()
-	  */
-
-	  theJob = jobName.replace("/", " ");
-	}
-
-	public String toString() {
-		return "BuildEnv ${jobName}";
-	}
-}
-
-BuildEnv buildEnv;
+@Field
+def buildEnv;
 
 node {
   ws("experiment") {
 
-	stage name:"Checkout";    
-		checkout scm;
-
-		sh 'git rev-parse HEAD > status'
-	  commit = readFile('status').trim()
-
-	  buildEnv = new BuildEnv(env, commit);
+ stage(name: "Checkout") {
+ 	 checkout scm;
 
 
-       echo "Env: ${buildEnv}";
-  	
+  	 buildEnv = load 'jenkins/buildEnv.groovy';
+     buildEnv();
 
-  
-  //echo "Build of ${env.GIT_COMMIT} on ${env.GIT_BRANCH}";
-  echo "Build of ${env.JOB_NAME} #${env.BUILD_NUMBER} : ${commit} on ${branch}";
 
-  echo "Is this a PR?";
+	}
+	
   int pr = 0;
-  if( branch.startsWith("PR/") ) {
-  	pr = Integer.parseInt(branch.substring(3));
+  if( buildEnv.isPR() ) {
+  	pr = Integer.parseInt(buildEnv.branch.substring(3));
 
   	echo "This is PR ${pr}";
 
   }
 
   // build
-	def mvnHome = tool 'maven';
+	def mvnHome = tool 'latest';
   //sh "${mvnHome}/bin/mvn -B verify"
   env.MAVEN_OPTS="-Xmx2G";
 
@@ -68,7 +33,7 @@ node {
   sh "${mvnHome}/bin/mvn -c clean install";
   
   // report back
-
+   if( pr != 0 ) {
 stage('Static code analysis') {
   //sh "${mvnHome}/bin/mvn package -DskipTests -Dmaven.test.failure.ignore=false -Dsurefire.skip=true -Dmaven.compile.fork=true -Dmaven.javadoc.skip=true"
 
@@ -107,6 +72,7 @@ stage('Static code analysis') {
   }
 
  }
+}
 }
 
 
