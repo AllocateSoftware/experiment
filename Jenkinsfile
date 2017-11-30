@@ -49,7 +49,7 @@ stage('Static code analysis') {
     repositoryName: 'experiment', 
     pullRequestId: "${pr}", 
  //   useOAuth2Token: false, 
- //   useOAuth2TokenCredentials: true,
+    useOAuth2TokenCredentials: false,
  //   oAuth2TokenCredentialsId: '2f56662a-5302-4cc6-9bd9-084abd43457d',
  //   oAuth2Token: '', 
  //   useUsernamePassword: true, 
