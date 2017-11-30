@@ -14,10 +14,12 @@ public class App
         String a = "hello";
 		String b = "goodbye";
 
-		if( a == b )
+		if( a = b )
 		{
 			System.out.println( "Hello World!" );
 		}
+
+		
 
 		String aString = "bob";
 		  b.replace('b', 'p');
