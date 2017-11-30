@@ -38,6 +38,7 @@ stage('Static code analysis') {
   //sh "${mvnHome}/bin/mvn package -DskipTests -Dmaven.test.failure.ignore=false -Dsurefire.skip=true -Dmaven.compile.fork=true -Dmaven.javadoc.skip=true"
 
   sh "${mvnHome}/bin/mvn findbugs:check";
+  	echo "This is PR ${pr}";
 
 
   step([
@@ -46,7 +47,7 @@ stage('Static code analysis') {
     gitHubUrl: 'https://api.github.com/', 
     repositoryOwner: 'AllocateSoftware', 
     repositoryName: 'experiment', 
-    pullRequestId: '${pr}', 
+    pullRequestId: "${pr}", 
     useOAuth2Token: false, 
     useOAuth2TokenCredentials: true,
     oAuth2TokenCredentialsId: '2f56662a-5302-4cc6-9bd9-084abd43457d',
